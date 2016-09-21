@@ -18,21 +18,27 @@ with open(SOLUTION_FILE, 'r') as tops:
 # CLIENT-SERVER COMMUNICATION FUNCTIONS ====================================
 #Logic to find out what message was sent
 def handleMsg(msg):
+	print("Inside handleMsg")
 	row = 0
 	modifiedMessage = ""
 	if (msg[0]==1):
+		print("handleMessage if 1")
         	if(msg[1]==0):
+			print("handleMsg if 2")
             		row = random.randint(1,95)
         	else:
+			print("else")
             		row = msg[1]
 	        modifiedMessage = msg[0] + "::" + msg[1] + "::" + newGame[row]
     	elif(msg[0]==2 and msg[1] == 1):
-        	    modifedMessage = (msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(newGame[msg[3]],sol))
+		print("msg[0]==2 and msg[1] == 1")
+		modifedMessage = (msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(newGame[msg[3]],sol))
     	elif (msg[0]==2 and msg[1] ==2):
         	print("Im inside get hint")
         	modifedMessage = (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(newGame[msg[2]], sol))
     	else:
         	modifedMessage = ("Something went wrong")
+	print("outside if modifedMessage is: " + modifiedMessage)
     	return (modifiedMessage)
 
 def checkMove(moves, solution):
