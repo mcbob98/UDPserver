@@ -8,39 +8,36 @@ serverSocket.bind(('', serverPort))
 # CONSTANTS ================================================================
 SOLUTION_FILE = "tops95.txt"
 NEW_GAME_FILE = "top95.txt"
-
+with open(NEW_GAME_FILE, 'r') as top:
+    newGame = [x.strip('\n') for x in top.readlines()]
+with open(SOLUTION_FILE, 'r') as tops:
+    sol = [s.strip('\n') for s in tops.readlines()]
 
 #FUNCTION DEFINITIONS ======================================================
 
 # CLIENT-SERVER COMMUNICATION FUNCTIONS ====================================
 #Logic to find out what message was sent
 def handleMsg(msg):
-	with open(NEW_GAME_FILE,'r') as top:
-		newGame = [x.strip('\n') for x in top.readlines()]
-	with open(SOLUTION_FILE,'r') as tops:
-		sol = [s.strip('\n') for s in tops.readlines()]
 	row = 0
-	
-    if (msg[0]==1):
-		if(msg[1]==0):
-			print("New game random")
-            row = random.randint(1,95)
-        else:
-			print("new game 1-95")
-            row = msg[1]
-	modifiedMessage = msg[0] + "::" + msg[1] + "::" + newGame[row]
-	elif (msg[0]==2 and msg[1] == 1):
-		print("check move")
-		modifedMessage = (msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(NewGame[msg[3]],sol))
-	elif (msg[0]==2 and msg[1] ==2):
-		print("Get Hint")
-		modifedMessage = (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(newGame[msg[2]], sol))
-		print("Get Hint: " + modifiedMessage)
-	return (modifiedMessage.strip())
+	modifiedMessage = ""
+	if (msg[0]==1):
+        	if(msg[1]==0):
+            		row = random.randint(1,95)
+        	else:
+            		row = msg[1]
+	        modifiedMessage = msg[0] + "::" + msg[1] + "::" + newGame[row]
+    	elif(msg[0]==2 and msg[1] == 1):
+        	    modifedMessage = (msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(newGame[msg[3]],sol))
+    	elif (msg[0]==2 and msg[1] ==2):
+        	print("Im inside get hint")
+        	modifedMessage = (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(newGame[msg[2]], sol))
+    	else:
+        	modifedMessage = ("Something went wrong")
+    	return (modifiedMessage)
 
 def checkMove(moves, solution):
 	count = 0
-	msg
+	msg =''
 	print("inside check move")
 	for n in moves:
 		if(n != solution[count]):
@@ -50,7 +47,7 @@ def checkMove(moves, solution):
 		else:
 			msg = 0
 		count += 1
-	return msge
+	return msg
 
 def getHint(game,sol):
 	print("inside get hint")
@@ -66,7 +63,7 @@ def getHint(game,sol):
 	return anwser
 
 # PROGRAM ==================================================================
-print "The server is ready to receive"
+print("The server is ready to receive")
 
 
 while 1:
@@ -75,5 +72,5 @@ while 1:
 	msg = message.split('::')
 	print(msg)
 	modifiedMessage =handleMsg(msg)
-	
+	print(modifiedMessage)
 	serverSocket.sendto(modifiedMessage, clientAddress)
