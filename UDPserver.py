@@ -30,10 +30,10 @@ def handleMsg(msg):
 			print("else")
             		row = msg[1]
 	        modifiedMessage = msg[0] + "::" + msg[1] + "::" + newGame[row]
-    	elif(msg[0]==2 and msg[1] == 1):
+    	elif(msg[0]=="2" and msg[1] == "1"):
 		print("msg[0]==2 and msg[1] == 1")
 		modifedMessage = (msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(newGame[msg[3]],sol))
-    	elif (msg[0]==2 and msg[1] ==2):
+    	elif (msg[0]=="2" and msg[1] == "2"):
         	print("Im inside get hint")
         	modifedMessage = (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(newGame[msg[2]], sol))
     	else:
