@@ -21,9 +21,9 @@ def handleMsg(msg):
 	print("Inside handleMsg")
 	row = 0
 	modifiedMessage = ""
-	if (msg[0]==1):
+	if (msg[0]=="1"):
 		print("handleMessage if 1")
-        	if(msg[1]==0):
+        	if(msg[1]=="0"):
 			print("handleMsg if 2")
             		row = random.randint(1,95)
         	else:
