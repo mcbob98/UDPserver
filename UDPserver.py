@@ -29,35 +29,44 @@ def handleMsg(msg):
         	else:
 			print("else")
             		row = msg[1]
-	        modifiedMessage = msg[0] + "::" + msg[1] + "::" + newGame[row]
+	        return ( msg[0] + "::" + str(row) + "::" + newGame[int(row)-1])
     	elif(msg[0]=="2" and msg[1] == "1"):
 		print("msg[0]==2 and msg[1] == 1")
-		modifedMessage = (msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(newGame[msg[3]],sol))
+		return(msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(msg[2],msg[3]))
     	elif (msg[0]=="2" and msg[1] == "2"):
-        	print("Im inside get hint")
-        	modifedMessage = (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(newGame[msg[2]], sol))
+        	print("Im inside get hint else")
+        	return (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(int(msg[2]),msg[3]))
+	elif (msg[0] =="2" and msg[1] == "3"):
+		print("i am inside solution")
+		return(msg[0] + "::"+ msg[1] +"::"+ msg[2] +"::"+ sol[int(msg[2])-1])
+		
     	else:
-        	modifedMessage = ("Something went wrong")
-	print("outside if modifedMessage is: " + modifiedMessage)
-    	return (modifiedMessage)
+        	return("Something went wrong")
+	
+    	print("did not reconize flag")
 
-def checkMove(moves, solution):
+def checkMove(number,game):
 	count = 0
-	msg =''
+	msg =[]
+	solution = sol[int(number)-1]
 	print("inside check move")
-	for n in moves:
-		if(n != solution[count]):
+	for n in game:
+		if(n != solution[count] and n != "."):
 			row = int(count /9)
 			col = count % 9
-			msg += (str(row) + str(col)+ " ")
-		else:
-			msg = 0
-		count += 1
-	return msg
+			msg.append (str(row) + str(col))
+		count +=1
+	if not msg:
+		return '0'
+	else:
+		return ''.join(msg)
+		
 
-def getHint(game,sol):
-	print("inside get hint")
+def getHint(number, game):
+	print("inside get hint method")
 	count = 0
+	solution = sol[number-1]
+	print("solution: " + solution)
 	pos = []
 	for n in game:
 		if(game[count] == "."):
@@ -65,8 +74,13 @@ def getHint(game,sol):
 		count += 1
 	size = len(pos)
 	num = random.choice(pos)
-	anwser = (game[:num] + sol[num] + game[num +1])   
-	return anwser
+	print("index: " + str(num))
+	print("the hint: " + solution[num])
+	ans = (game[:num] + solution[num] + game[(num +1):])
+	print("This is from gethint method: " + ans)
+	return ans
+
+
 
 # PROGRAM ==================================================================
 print("The server is ready to receive")
@@ -78,5 +92,5 @@ while 1:
 	msg = message.split('::')
 	print(msg)
 	modifiedMessage =handleMsg(msg)
-	print(modifiedMessage)
+	print("This is what I am sending: " + modifiedMessage)
 	serverSocket.sendto(modifiedMessage, clientAddress)
