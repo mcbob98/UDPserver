@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#Authors: Robert McDevitt and Miriam Cox
 import random
 from socket import *
 serverPort = 12004
@@ -35,8 +36,8 @@ def handleMsg(msg):
 		print("msg[0]==2 and msg[1] == 1")
 		return(msg[0]+"::"+msg[1]+"::"+msg[2]+"::" + checkMove(msg[2],msg[3]))
     	elif (msg[0]=="2" and msg[1] == "2"):
-        	print("Im inside get hint else")
-        	return (msg[0] + "::" + msg[1]+ "::" + msg[2] + "::" + getHint(int(msg[2]),msg[3]))
+        	print("Im inside get hint else: " + msg[3])
+        	return (msg[0] + "::" + msg[1]+ "::" +  msg[2] + "::" + getHint(int(msg[2]),msg[3]))
 	elif (msg[0] =="2" and msg[1] == "3"):
 		print("i am inside solution")
 		return(msg[0] + "::"+ msg[1] +"::"+ msg[2] +"::"+ sol[int(msg[2])-1])
@@ -69,6 +70,8 @@ def getHint(number, game):
 	solution = sol[number-1]
 	print("solution: " + solution)
 	pos = []
+	
+	print("Number:" + str(number) + " Game: " + str(game)) 
 	for n in game:
 		if(game[count] == "."):
 			pos.append(count)
@@ -89,8 +92,8 @@ print("The server is ready to receive")
 
 while 1:
 	connectionSocket, addr = serverSocket.accept()
-	message = connectionSocket.recv(1024)
-	print(message)
+	message = connectionSocket.recv(2048)
+	print("I am recieving: " + message)
 	msg = message.split('::')
 	print(msg)
 	modifiedMessage = handleMsg(msg)
